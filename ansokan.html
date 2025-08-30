@@ -3,52 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Västra RP – Ansökan</title>
-  <meta name="description" content="Ansökningsformulär till Västra RP – Polis, EMS och Whitelist." />
+  <title>Västra RP – Ansökan (Whitelist)</title>
+  <meta name="description" content="Ansök om whitelist till Västra RP. Fyll i formuläret och skicka – vi svarar i Discord." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0d1225; --card:#121733; --text:#e7eaf6; --muted:#b8c0e0;
-      --accent:#16a34a; --accent-2:#0ea5e9; --ring:rgba(22,163,74,.35);
-      --border:rgba(255,255,255,.08); --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
+      --bg:#0c1222; --panel:#0f1530; --card:#121a3b; --text:#e7eaf6; --muted:#b8c0e0;
+      --accent:#16a34a; --accent-2:#0ea5e9; --border:rgba(255,255,255,.08); --ring:rgba(14,165,233,.35);
+      --shadow:0 10px 30px rgba(0,0,0,.45); --radius:16px;
     }
     *{box-sizing:border-box}
-    body{margin:0;background: radial-gradient(1200px 800px at 10% -10%, rgba(14,165,233,.15), transparent),
-                         radial-gradient(1200px 800px at 110% 10%, rgba(22,163,74,.1), transparent), var(--bg);
-         color:var(--text); font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    body{margin:0;background:radial-gradient(1200px 800px at -10% -10%, rgba(14,165,233,.16), transparent),
+                          radial-gradient(1200px 800px at 110% -10%, rgba(22,163,74,.12), transparent), var(--bg);
+      color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
     a{color:inherit;text-decoration:none}
-    .container{width:min(1000px,100% - 2rem);margin-inline:auto}
-    header{position:sticky;top:0;z-index:10;background:rgba(13,18,37,.65);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .container{width:min(1200px,100% - 2rem);margin-inline:auto}
+    header{position:sticky;top:0;z-index:10;background:rgba(12,18,34,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
     .nav{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0}
     .brand{display:flex;gap:.7rem;align-items:center;font-weight:700}
-    .brand img{height:36px;width:auto}
-    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.8rem 1rem;border-radius:999px;background:linear-gradient(180deg, var(--accent), #148a3f);color:#fff;border:1px solid rgba(255,255,255,.1);box-shadow:var(--shadow);font-weight:600}
-    .btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
-    .btn.ghost{background:transparent;border:1px solid var(--border)}
+    .brand svg{height:32px;width:32px}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1.1rem;border-radius:999px;border:1px solid var(--border);background:linear-gradient(180deg, var(--accent), #148a3f);color:#fff;font-weight:600;box-shadow:var(--shadow)}
     .btn.alt{background:linear-gradient(180deg,var(--accent-2),#0b83bf)}
-    .section{padding:2.5rem 0}
-    h1{font-size:clamp(1.6rem,3vw,2.4rem);margin:0}
-    h2{font-size:1.2rem;margin:.2rem 0 1rem}
-    .tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
-    .tab{padding:.5rem .8rem;border-radius:999px;border:1px solid var(--border);color:var(--muted);cursor:pointer;user-select:none}
-    .tab.active{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));color:var(--text)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.2rem}
-    label{display:block;margin:.6rem 0 .35rem;font-weight:600}
+    .btn.ghost{background:transparent}
+    .section{padding:2.2rem 0}
+
+    /* layout */
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:1.2rem;align-items:start}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .p-2{padding:1.2rem}
     .muted{color:var(--muted)}
-    input,select,textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:.75rem}
-    textarea{min-height:110px;resize:vertical}
-    small.help{display:block;color:var(--muted);margin-top:.3rem}
+
+    label{display:block;margin:.6rem 0 .35rem;font-weight:600}
+    input,select,textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:.8rem}
+    textarea{min-height:160px;resize:vertical}
+
     .row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
     @media (max-width:720px){.row{grid-template-columns:1fr}}
-    .flex{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+
+    .radios{display:flex;gap:1rem;flex-wrap:wrap}
+    .radios label{display:inline-flex;gap:.5rem;align-items:center;font-weight:500;margin:0}
+
+    .toolbar{display:flex;gap:.3rem;flex-wrap:wrap;border:1px solid var(--border);border-radius:10px;padding:.35rem;background:rgba(255,255,255,.03)}
+    .toolbtn{padding:.45rem .55rem;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);cursor:pointer}
+    .editor{border:1px solid var(--border);border-radius:10px;padding:.75rem;background:rgba(255,255,255,.03);min-height:220px}
+    .counter{font-size:.9rem;color:var(--muted);text-align:right;margin-top:.3rem}
+
     .success,.error{padding:.75rem 1rem;border-radius:10px;margin-top:1rem}
     .success{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
     .error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+
     footer{border-top:1px solid var(--border);padding:2rem 0;color:var(--muted);margin-top:2rem}
     .hidden{display:none !important}
   </style>
@@ -56,363 +63,196 @@
 <body>
   <header>
     <div class="container nav">
-      <a class="brand" href="index.html"><img src="assets/logo.png" alt="Västra RP"/><span>Västra RP</span></a>
-      <div class="flex">
-        <a class="btn ghost" href="index.html">⟵ Till startsidan</a>
-        <a class="btn alt" href="https://discord.gg/" target="_blank" rel="noopener">Discord</a>
+      <a class="brand" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1f2a4d" opacity=".5"/><rect x="11" y="22" width="42" height="20" rx="4" fill="#2b3a67"/><rect x="11" y="30" width="42" height="4" fill="#ffd200"/><rect x="26" y="22" width="4" height="20" fill="#ffd200"/></svg><span>Västra RP</span></a>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+        <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Discord</a>
+        <a class="btn alt" href="index.html">Till startsidan</a>
       </div>
     </div>
   </header>
 
   <main class="section">
-    <div class="container">
-      <h1>Ansökan</h1>
-      <p class="muted">Välj vilket formulär du vill fylla i. Alla fält markerade med * är obligatoriska. När du skickar formuläret går det till vår Discord via webhook.</p>
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="whitelist" role="tab" aria-selected="true">Whitelist</button>
-        <button class="tab" data-tab="polis" role="tab" aria-selected="false">Polis</button>
-        <button class="tab" data-tab="ems" role="tab" aria-selected="false">EMS</button>
-      </div>
+    <div class="container grid">
 
-      <!-- Whitelist form -->
-      <section id="form-whitelist" class="card section" style="padding:1.2rem;">
-        <h2>Whitelist‑ansökan</h2>
+      <!-- VÄNSTER: FORMULÄR -->
+      <section class="card p-2">
+        <h2>Personlig information</h2>
         <form id="wlForm" novalidate>
           <div class="row">
             <div>
-              <label for="wl-discord">Discord*</label>
-              <input id="wl-discord" name="discord" placeholder="ex. Viktor#1234" required />
+              <label for="fullName">Fullständigt namn*</label>
+              <input id="fullName" name="fullName" required placeholder="För- och efternamn"/>
             </div>
             <div>
-              <label for="wl-age">Ålder*</label>
-              <input id="wl-age" name="age" type="number" min="13" max="99" required />
+              <label for="birth">Födelsedatum (YYYY‑MM‑DD)*</label>
+              <input id="birth" name="birth" type="date" required placeholder="YYYY-MM-DD"/>
             </div>
           </div>
+
+          <h2 style="margin-top:1rem">Karaktär information</h2>
           <div class="row">
             <div>
-              <label for="wl-hours">Speltimmar i RP* (uppskattat)</label>
-              <input id="wl-hours" name="hours" type="number" min="0" max="10000" required />
+              <label for="charName">Karaktärsnamn*</label>
+              <input id="charName" name="charName" required placeholder="Förnamn Efternamn"/>
             </div>
             <div>
-              <label for="wl-availability">Tillgänglighet* (t.ex. vardagar 18‑22)</label>
-              <input id="wl-availability" name="availability" required />
-            </div>
-          </div>
-          <label for="wl-why">Varför vill du spela hos oss?*</label>
-          <textarea id="wl-why" name="why" maxlength="1200" required></textarea>
-          <small class="help">Max 1200 tecken.</small>
-
-          <div class="row">
-            <div>
-              <label for="wl-exp">Tidigare RP‑erfarenhet</label>
-              <textarea id="wl-exp" name="experience" maxlength="1200"></textarea>
-            </div>
-            <div>
-              <label for="wl-extra">Övrigt</label>
-              <textarea id="wl-extra" name="extra" maxlength="1200"></textarea>
+              <label for="charType">Karaktärstyp</label>
+              <div class="radios" id="charType">
+                <label><input type="radio" name="type" value="Laglig" checked> Laglig</label>
+                <label><input type="radio" name="type" value="Kriminell"> Kriminell</label>
+                <label><input type="radio" name="type" value="Sjukvård/polis"> Sjukvård/polis</label>
+              </div>
             </div>
           </div>
 
-          <input type="text" id="wl-hpt" name="phone" class="hidden" autocomplete="off" />
+          <label style="margin-top:.8rem">Karaktärsprofil*</label>
+          <div class="toolbar" aria-label="Editorverktyg">
+            <button class="toolbtn" type="button" data-cmd="bold"><b>B</b></button>
+            <button class="toolbtn" type="button" data-cmd="italic"><i>I</i></button>
+            <button class="toolbtn" type="button" data-cmd="underline"><u>U</u></button>
+            <button class="toolbtn" type="button" data-cmd="insertUnorderedList">• Lista</button>
+            <button class="toolbtn" type="button" data-cmd="insertOrderedList">1. Lista</button>
+            <button class="toolbtn" type="button" id="clearBtn">Rensa</button>
+          </div>
+          <div id="editor" class="editor" contenteditable="true" aria-multiline="true"></div>
+          <div class="counter"><span id="cnt">0</span>/3000</div>
+          <input type="hidden" id="editorField" name="profile"/>
 
-          <div class="flex" style="justify-content:flex-end;margin-top:1rem">
-            <button class="btn" type="submit">Skicka whitelist</button>
+          <div style="margin-top:1rem">
+            <label class="muted" style="font-weight:500">
+              <input type="checkbox" id="terms" required> Jag godkänner villkoren och hanteringen av mina personuppgifter.
+            </label>
+          </div>
+
+          <input type="text" id="hp" name="phone" class="hidden" autocomplete="off" />
+
+          <div style="display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+            <button class="btn" type="submit">Skicka ansökan</button>
           </div>
           <div id="wl-msg" class="hidden"></div>
         </form>
       </section>
 
-      <!-- Police form -->
-      <section id="form-polis" class="card section hidden" style="padding:1.2rem;">
-        <h2>Polis – ansökan</h2>
-        <form id="policeForm" novalidate>
-          <div class="row">
-            <div>
-              <label for="po-discord">Discord*</label>
-              <input id="po-discord" name="discord" required />
-            </div>
-            <div>
-              <label for="po-char">Karaktärsnamn*</label>
-              <input id="po-char" name="character" placeholder="Förnamn Efternamn" required />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="po-age">Ålder*</label>
-              <input id="po-age" name="age" type="number" min="16" max="99" required />
-            </div>
-            <div>
-              <label for="po-availability">Tillgänglighet*</label>
-              <input id="po-availability" name="availability" required />
-            </div>
-          </div>
-          <label for="po-motivation">Varför polisen?*</label>
-          <textarea id="po-motivation" name="motivation" maxlength="1400" required></textarea>
-          <div class="row">
-            <div>
-              <label for="po-experience">Tidigare polis‑/ledarerfarenhet</label>
-              <textarea id="po-experience" name="experience" maxlength="1400"></textarea>
-            </div>
-            <div>
-              <label for="po-scenario">Scenario: Du anländer till ett rån med gisslan. Hur agerar du?*</label>
-              <textarea id="po-scenario" name="scenario" maxlength="1400" required></textarea>
-            </div>
-          </div>
-          <input type="text" id="po-hpt" name="phone" class="hidden" autocomplete="off" />
-          <div class="flex" style="justify-content:flex-end;margin-top:1rem">
-            <button class="btn" type="submit">Skicka polisansökan</button>
-          </div>
-          <div id="po-msg" class="hidden"></div>
-        </form>
-      </section>
+      <!-- HÖGER: INFO -->
+      <aside class="card p-2">
+        <h2>Ansök om whitelist på Västra RP</h2>
+        <p class="muted">Fantastiskt att du vill ansöka hos oss. Läs igenom punkterna och fyll i ansökan noggrant.</p>
+        <ul class="muted">
+          <li>Vi söker mogna och respektfulla spelare som bidrar till bra RP.</li>
+          <li>Du är villig att utveckla din karaktär och interagera meningsfullt med andra.</li>
+          <li>God kommunikation och konsekvenstänk är viktigt.</li>
+        </ul>
+        <h3 style="margin-top:1rem">Skriv om din karaktär</h3>
+        <ul class="muted">
+          <li>Karaktärens namn och ålder.</li>
+          <li>Egenskaper/personlighet och varför den passar in.</li>
+          <li>Vilken typ av RP/roller karaktären kan bidra med.</li>
+          <li>Hur konflikter hanteras (IC).</li>
+          <li>Vad som lockade dig till Västra RP.</li>
+        </ul>
+        <h3 style="margin-top:1rem">Hur du ansöker</h3>
+        <ol class="muted">
+          <li>Anslut till vår <a href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener" style="text-decoration:underline">Discord</a>.</li>
+          <li>Fyll i formuläret till vänster så noggrant du kan.</li>
+          <li>Vi återkommer i Discord när ansökan granskats.</li>
+        </ol>
+      </aside>
 
-      <!-- EMS form -->
-      <section id="form-ems" class="card section hidden" style="padding:1.2rem;">
-        <h2>EMS – ansökan</h2>
-        <form id="emsForm" novalidate>
-          <div class="row">
-            <div>
-              <label for="em-discord">Discord*</label>
-              <input id="em-discord" name="discord" required />
-            </div>
-            <div>
-              <label for="em-char">Karaktärsnamn*</label>
-              <input id="em-char" name="character" placeholder="Förnamn Efternamn" required />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="em-age">Ålder*</label>
-              <input id="em-age" name="age" type="number" min="16" max="99" required />
-            </div>
-            <div>
-              <label for="em-availability">Tillgänglighet*</label>
-              <input id="em-availability" name="availability" required />
-            </div>
-          </div>
-          <label for="em-motivation">Varför EMS?*</label>
-          <textarea id="em-motivation" name="motivation" maxlength="1400" required></textarea>
-          <div class="row">
-            <div>
-              <label for="em-experience">Tidigare sjukvård/RP‑erfarenhet</label>
-              <textarea id="em-experience" name="experience" maxlength="1400"></textarea>
-            </div>
-            <div>
-              <label for="em-scenario">Scenario: Flera skadade på plats, hur prioriterar du?*</label>
-              <textarea id="em-scenario" name="scenario" maxlength="1400" required></textarea>
-            </div>
-          </div>
-          <input type="text" id="em-hpt" name="phone" class="hidden" autocomplete="off" />
-          <div class="flex" style="justify-content:flex-end;margin-top:1rem">
-            <button class="btn" type="submit">Skicka EMS‑ansökan</button>
-          </div>
-          <div id="em-msg" class="hidden"></div>
-        </form>
-      </section>
-
-      <p class="muted">Genom att skicka godkänner du att vi lagrar informationen för rekryteringsändamål. Behöver du få din data raderad? Kontakta staff i Discord.</p>
     </div>
   </main>
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
       <div class="muted">© <span id="year"></span> Västra RP</div>
-      <div class="flex">
-        <a class="btn ghost" href="index.html">Startsida</a>
-        <a class="btn alt" href="https://discord.gg/" target="_blank" rel="noopener">Discord</a>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a class="muted" href="privacy.html">Privacy Policy</a>
+        <a class="muted" href="terms.html">Terms of Service</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // ---- SETTINGS -----------------------------------------------------------
-    // Fyll i dina webhooks nedan (olika kanaler rekommenderas)
-    const WEBHOOKS = {
-      whitelist: "https://discord.com/api/webhooks/1411374933275316224/0uknYn_OxYtsphfO4Yp9xdNuzqy_8DLufN694WX3aIf2zm9mdrXjtzJ5AKkAWo-zocg5",
-      police:    "https://discord.com/api/webhooks/1411374933275316224/0uknYn_OxYtsphfO4Yp9xdNuzqy_8DLufN694WX3aIf2zm9mdrXjtzJ5AKkAWo-zocg5",
-      ems:       "https://discord.com/api/webhooks/1411374933275316224/0uknYn_OxYtsphfO4Yp9xdNuzqy_8DLufN694WX3aIf2zm9mdrXjtzJ5AKkAWo-zocg5"
-    };
+    // ----- SETTINGS -----
+    const WEBHOOKS = { whitelist: "https://discord.com/api/webhooks/XXXX/WHITELIST" };
+    const RELAY_URL = ""; // Om du använder en enkel relay/proxy, sätt URL här.
 
-    // Om du vill dölja webhooks, använd en enkel relay (Cloudflare Worker/Netlify).
-    // Lämna tomt för att posta direkt till Discord (kan blockas av CORS i vissa lägen).
-    const RELAY_URL = ""; // ex: "https://your-relay.example.com/discord"
-
-    // ---- UTILS --------------------------------------------------------------
+    // helpers
     const $ = (q,ctx=document)=>ctx.querySelector(q);
     const $$ = (q,ctx=document)=>[...ctx.querySelectorAll(q)];
+    const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-    function setMsg(el, type, text){
-      el.className = type === 'error' ? 'error' : 'success';
-      el.textContent = text;
-      el.classList.remove('hidden');
-    }
+    // Editor toolbar (execCommand används för enkelhet – funkar i moderna browsers även om det är deprecated)
+    const editor = document.getElementById('editor');
+    const cnt = document.getElementById('cnt');
+    const hidden = document.getElementById('editorField');
+    const MAX = 3000;
 
-    function validRequired(form){
-      const required = $$('[required]', form);
-      for(const f of required){
-        if(!f.value || (f.type === 'number' && (isNaN(f.value) || f.value === ''))){
-          f.focus();
-          return false;
-        }
-      }
-      return true;
-    }
+    $$('.toolbtn').forEach(btn => btn.addEventListener('click', ()=>{
+      const cmd = btn.dataset.cmd;
+      if(cmd){ document.execCommand(cmd,false,null); editor.focus(); }
+      if(btn.id==='clearBtn'){ editor.innerHTML=''; updateCount(); }
+    }));
 
-    function honeypotTripped(form){
-      const hp = $("input[name='phone']", form);
-      return hp && hp.value.trim().length > 0;
+    function updateCount(){
+      const t = editor.innerText.trim();
+      cnt.textContent = t.length;
+      if(t.length>MAX){ editor.innerText = t.slice(0,MAX); cnt.textContent = MAX; }
     }
+    editor.addEventListener('input', updateCount);
+    updateCount();
 
-    function embedify(title, color, fields){
-      return { embeds: [{
-        title, color, fields,
-        footer: { text: 'Västra RP Ansökan' },
-        timestamp: new Date().toISOString()
-      }] };
-    }
+    function setMsg(el, type, text){ el.className = type==='error' ? 'error' : 'success'; el.textContent = text; el.classList.remove('hidden'); }
+    function honeypot(form){ const hp = $('#hp', form); return hp && hp.value.trim().length>0; }
 
     async function postDiscord(url, payload){
-      // Försök via relay först om satt
       if(RELAY_URL){
-        const r = await fetch(RELAY_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, payload})});
+        const r = await fetch(RELAY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,payload})});
         if(!r.ok) throw new Error('Relay svarade inte ('+r.status+')');
         return true;
       }
-      // Direkt – OBS: kan blockas av CORS i vissa browsers; no-cors fallback
       try{
-        const r = await fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+        const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
         if(!r.ok) throw new Error('Webhook fel: '+r.status);
         return true;
       }catch(err){
-        // no-cors fallback: vi försöker skicka ändå utan att läsa svar
-        try{
-          await fetch(url, {method:'POST', mode:'no-cors', body:JSON.stringify(payload)});
-          return true; // vi kan inte verifiera svar men antar ok
-        }catch(e){ throw err; }
+        try{ await fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}); return true; }catch(e){ throw err; }
       }
     }
 
-    function disableForm(form, disabled){
-      $$('input,textarea,select,button', form).forEach(el=>el.disabled = !!disabled);
-    }
+    function embedify(title, color, fields){ return { embeds:[{ title, color, fields, footer:{text:'Västra RP Ansökan'}, timestamp:new Date().toISOString() }] }; }
 
-    function commonFields(form){
-      return {
-        discord: $("input[name='discord']", form)?.value?.trim() || '-',
-        age: $("input[name='age']", form)?.value?.trim() || '-',
-        availability: $("input[name='availability']", form)?.value?.trim() || '-',
-      };
-    }
-
-    // ---- TABS ---------------------------------------------------------------
-    const tabs = $$('.tab');
-    tabs.forEach(t=> t.addEventListener('click',()=>{
-      tabs.forEach(x=>x.classList.remove('active'));
-      t.classList.add('active');
-      const tab = t.dataset.tab;
-      $('#form-whitelist').classList.toggle('hidden', tab !== 'whitelist');
-      $('#form-polis').classList.toggle('hidden', tab !== 'polis');
-      $('#form-ems').classList.toggle('hidden', tab !== 'ems');
-    }));
-
-    // ---- YEAR ---------------------------------------------------------------
-    $('#year').textContent = new Date().getFullYear();
-
-    // ---- WHITELIST SUBMIT ---------------------------------------------------
+    // submit
     $('#wlForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const form = e.currentTarget; const msg = $('#wl-msg'); msg.classList.add('hidden');
-      if(honeypotTripped(form)) return; // bots
-      if(!validRequired(form)) return setMsg(msg,'error','Fyll i alla obligatoriska fält.');
+      if(honeypot(form)) return;
+      const fullName = $('#fullName').value.trim();
+      const birth = $('#birth').value.trim();
+      const charName = $('#charName').value.trim();
+      const type = (document.querySelector('input[name="type"]:checked')||{}).value || '-';
+      const profile = editor.innerText.trim();
+      const terms = $('#terms').checked;
 
-      const base = commonFields(form);
-      const why = $('#wl-why').value.trim();
-      const exp = $('#wl-exp').value.trim();
-      const extra = $('#wl-extra').value.trim();
+      if(!fullName || !birth || !charName || !profile || !terms){
+        return setMsg(msg,'error','Fyll i alla fält och godkänn villkoren.');
+      }
+
       const fields = [
-        { name:'Discord', value: base.discord, inline:true },
-        { name:'Ålder', value: base.age, inline:true },
-        { name:'Tillgänglighet', value: base.availability, inline:true },
-        { name:'Varför Västra RP?', value: why || '-' },
-        { name:'Tidigare RP‑erfarenhet', value: exp || '-' },
-        { name:'Övrigt', value: extra || '-' }
+        { name:'Fullständigt namn', value: fullName, inline:true },
+        { name:'Födelsedatum', value: birth, inline:true },
+        { name:'Karaktärsnamn', value: charName, inline:true },
+        { name:'Karaktärstyp', value: type, inline:true },
+        { name:'Karaktärsprofil', value: profile }
       ];
 
-      disableForm(form, true);
+      // disable
+      $$('input,textarea,button', form).forEach(x=>x.disabled=true);
       try{
-        await postDiscord(WEBHOOKS.whitelist, embedify('Whitelist‑ansökan', 0x22c55e, fields));
-        setMsg(msg,'success','Tack! Din whitelist‑ansökan har skickats. Vi återkommer i Discord.');
-        form.reset();
-      }catch(err){
-        console.error(err);
-        setMsg(msg,'error','Kunde inte skicka ansökan. Kontakta staff eller prova igen.');
-      }finally{ disableForm(form, false); }
-    });
-
-    // ---- POLICE SUBMIT ------------------------------------------------------
-    $('#policeForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const form = e.currentTarget; const msg = $('#po-msg'); msg.classList.add('hidden');
-      if(honeypotTripped(form)) return;
-      if(!validRequired(form)) return setMsg(msg,'error','Fyll i alla obligatoriska fält.');
-
-      const base = commonFields(form);
-      const char = $('#po-char').value.trim();
-      const mot = $('#po-motivation').value.trim();
-      const exp = $('#po-experience').value.trim();
-      const scen = $('#po-scenario').value.trim();
-      const fields = [
-        { name:'Discord', value: base.discord, inline:true },
-        { name:'Ålder', value: base.age, inline:true },
-        { name:'Tillgänglighet', value: base.availability, inline:true },
-        { name:'Karaktär', value: char || '-' },
-        { name:'Motivation', value: mot || '-' },
-        { name:'Erfarenhet', value: exp || '-' },
-        { name:'Scenario', value: scen || '-' }
-      ];
-
-      disableForm(form, true);
-      try{
-        await postDiscord(WEBHOOKS.police, embedify('Polis – ansökan', 0x0ea5e9, fields));
-        setMsg(msg,'success','Tack! Din polisansökan har skickats. Vi återkommer i Discord.');
-        form.reset();
-      }catch(err){
-        console.error(err);
-        setMsg(msg,'error','Kunde inte skicka ansökan. Kontakta staff eller prova igen.');
-      }finally{ disableForm(form, false); }
-    });
-
-    // ---- EMS SUBMIT ---------------------------------------------------------
-    $('#emsForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const form = e.currentTarget; const msg = $('#em-msg'); msg.classList.add('hidden');
-      if(honeypotTripped(form)) return;
-      if(!validRequired(form)) return setMsg(msg,'error','Fyll i alla obligatoriska fält.');
-
-      const base = commonFields(form);
-      const char = $('#em-char').value.trim();
-      const mot = $('#em-motivation').value.trim();
-      const exp = $('#em-experience').value.trim();
-      const scen = $('#em-scenario').value.trim();
-      const fields = [
-        { name:'Discord', value: base.discord, inline:true },
-        { name:'Ålder', value: base.age, inline:true },
-        { name:'Tillgänglighet', value: base.availability, inline:true },
-        { name:'Karaktär', value: char || '-' },
-        { name:'Motivation', value: mot || '-' },
-        { name:'Erfarenhet', value: exp || '-' },
-        { name:'Scenario', value: scen || '-' }
-      ];
-
-      disableForm(form, true);
-      try{
-        await postDiscord(WEBHOOKS.ems, embedify('EMS – ansökan', 0x22c55e, fields));
-        setMsg(msg,'success','Tack! Din EMS‑ansökan har skickats. Vi återkommer i Discord.');
-        form.reset();
-      }catch(err){
-        console.error(err);
-        setMsg(msg,'error','Kunde inte skicka ansökan. Kontakta staff eller prova igen.');
-      }finally{ disableForm(form, false); }
+        await postDiscord(WEBHOOKS.whitelist, embedify('Whitelist-ansökan', 0x22c55e, fields));
+        setMsg(msg,'success','Tack! Vi har mottagit din ansökan. Vi återkommer i Discord.');
+        form.reset(); editor.innerHTML=''; updateCount();
+      }catch(err){ console.error(err); setMsg(msg,'error','Kunde inte skicka ansökan. Försök igen eller kontakta staff.'); }
+      finally{ $$('input,textarea,button', form).forEach(x=>x.disabled=false); }
     });
   </script>
 </body>

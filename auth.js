@@ -11,7 +11,7 @@
  */
 (function(){
   const CONFIG = {
-    DISCORD_CLIENT_ID: "YOUR_CLIENT_ID_HERE", // TODO: replace with your Discord app Client ID
+    DISCORD_CLIENT_ID: "https://discord.gg/3wRYxTPCU8", // TODO: replace with your Discord app Client ID
     SCOPES: ["identify"],
     RELAY_URL: "" // optional: set to your CORS relay endpoint if direct fetch fails
   };

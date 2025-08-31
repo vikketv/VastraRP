@@ -155,70 +155,44 @@
   </div>
 </div>
 <script>
-  // --- SIMPLE AUTH (localStorage) ---
-  const AUTH_KEY = 'vastra_auth';
-  const getAuth = ()=>{ try{return JSON.parse(localStorage.getItem(AUTH_KEY));}catch(e){return null} };
-  const setAuth = (obj)=>localStorage.setItem(AUTH_KEY, JSON.stringify(obj));
-  const clearAuth = ()=>localStorage.removeItem(AUTH_KEY);
-
-  const loginBtn = document.getElementById('loginBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const userChip = document.getElementById('userChip');
-  const userName = document.getElementById('userName');
-  const applyBtn = document.getElementById('applyBtn');
-  const applyBtnMobile = document.getElementById('applyBtnMobile');
-  const loginLinkMobile = document.getElementById('loginLinkMobile');
-
-  const modal = document.getElementById('loginModal');
-  const closeLogin = document.getElementById('closeLogin');
-  const loginForm = document.getElementById('loginForm');
-  const loginName = document.getElementById('loginName');
-
-  function openLogin(){ modal.removeAttribute('hidden'); loginName && loginName.focus(); }
-  function closeLoginModal(){ modal.setAttribute('hidden',''); }
-
-  function updateAuthUI(){
-    const a = getAuth();
-    if(a){
-      userChip.style.display='inline-flex';
-      userName.textContent = a.name;
-      loginBtn.style.display='none';
-      logoutBtn.style.display='inline-flex';
+  async function getMe(){
+    try{ const r = await fetch('/api/me', { credentials: 'include' }); return r.ok ? r.json() : null; }
+    catch{ return null; }
+  }
+  function setAuthUI(me){
+    const userChip = document.getElementById('userChip');
+    const userName = document.getElementById('userName');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    if(me){
+      userChip.style.display = 'inline-flex';
+      userName.textContent = me.global_name || me.username;
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-flex';
     }else{
-      userChip.style.display='none';
-      loginBtn.style.display='inline-flex';
-      logoutBtn.style.display='none';
+      userChip.style.display = 'none';
+      loginBtn.style.display = 'inline-flex';
+      logoutBtn.style.display = 'none';
     }
   }
+  // Knapp-handlers
+  document.getElementById('loginBtn')?.addEventListener('click', ()=> location.href='/api/login');
+  document.getElementById('logoutBtn')?.addEventListener('click', ()=> location.href='/api/logout');
 
-  loginBtn && loginBtn.addEventListener('click', openLogin);
-  loginLinkMobile && loginLinkMobile.addEventListener('click', openLogin);
-  closeLogin && closeLogin.addEventListener('click', closeLoginModal);
-
-  loginForm && loginForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    const name = loginName.value.trim();
-    if(!name) return;
-    setAuth({ name, ts: Date.now() });
-    closeLoginModal();
-    updateAuthUI();
-  });
-
-  logoutBtn && logoutBtn.addEventListener('click', ()=>{ clearAuth(); updateAuthUI(); });
-
-  function goApply(){
-    const a = getAuth();
-    if(!a){ openLogin(); return; }
+  async function goApply(){
+    const me = await getMe();
+    if(!me){ location.href = '/api/login'; return; }
     location.href = 'ansokan.html';
   }
-  applyBtn && applyBtn.addEventListener('click', goApply);
-  applyBtnMobile && applyBtnMobile.addEventListener('click', goApply);
+  document.getElementById('applyBtn')?.addEventListener('click', goApply);
+  document.getElementById('applyBtnMobile')?.addEventListener('click', goApply);
 
-  // Auto-öppna login om man skickats hit med ?login=required
-  if(new URLSearchParams(location.search).get('login') === 'required'){ openLogin(); }
-
-  // init
-  updateAuthUI();
+  // Init UI
+  (async ()=> setAuthUI(await getMe()))();
+  // Om man kom från redirect med ?login=required -> starta login direkt
+  if(new URLSearchParams(location.search).get('login')==='required'){
+    location.replace('/api/login');
+  }
 </script>
 </body>
 </html>

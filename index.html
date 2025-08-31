@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Västra RP – Start</title>
-  <meta name="description" content="Västra RP – Svensk FiveM RP. Prioritet, scripts, regler och ansökan." />
+  <meta name="description" content="Västra RP – Svensk FiveM RP. regler och ansökan." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -61,6 +61,10 @@
       .menu{display:inline-flex}
     }
     :is(a,button,.btn,input,textarea,select):focus{outline:none;box-shadow:0 0 0 6px var(--ring)}
+      /* Login modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:100}
+  .modal .box{width:min(420px,100% - 2rem);background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:1.2rem}
+  .modal .row{display:grid;grid-template-columns:1fr;gap:.6rem}
   </style>
 </head>
 <body>
@@ -72,20 +76,14 @@
       </a>
       <nav class="navlinks">
       </nav>
-      <div style="display:flex;gap:.6rem;align-items:center">
-        <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Gå till Discord</a>
-        <a class="btn alt" href="ansokan.html">Ansök nu</a>
-        <button class="btn ghost menu" id="menuBtn">☰</button>
-      </div>
-    </div>
-  </header>
-
-  <div id="mobileMenu" hidden style="border-bottom:1px solid var(--border);background:rgba(12,18,34,.9);backdrop-filter:blur(10px)">
-    <div class="container" style="padding:.6rem 0 1rem;display:grid;gap:.5rem">
-      <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Gå till Discord</a>
-      <a class="btn alt" href="ansokan.html">Ansök nu</a>
-    </div>
-  </div>
+<div style="display:flex;gap:.6rem;align-items:center">
+  <span id="userChip" class="chip" style="display:none">Inloggad som <b id="userName"></b></span>
+  <button class="btn ghost" id="loginBtn">Logga in</button>
+  <button class="btn ghost" id="logoutBtn" style="display:none">Logga ut</button>
+  <button class="btn alt" id="applyBtn">Ansök nu</button>
+  <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Gå till Discord</a>
+  <button class="btn ghost menu" id="menuBtn">☰</button>
+</div>
 
   <main id="top" class="hero">
     <div class="container hero-grid">
@@ -139,6 +137,88 @@
       a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});mobile.setAttribute('hidden','');}})
     });
   </script>
-    <script src="auth.js"></script>
+  <!-- Login Modal -->
+<div id="loginModal" class="modal" hidden>
+  <div class="box">
+    <h3 style="margin:0 0 .6rem">Logga in</h3>
+    <p class="muted" style="margin-top:0">Fyll i ditt Discord-namn (eller valfritt namn) för att låsa upp ansökan.</p>
+    <form id="loginForm" class="row">
+      <div>
+        <label for="loginName">Namn</label>
+        <input id="loginName" placeholder="ex. Viktor#1234" required />
+      </div>
+      <div style="display:flex;gap:.6rem;justify-content:flex-end">
+        <button type="button" class="btn ghost" id="closeLogin">Avbryt</button>
+        <button type="submit" class="btn">Logga in</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  // --- SIMPLE AUTH (localStorage) ---
+  const AUTH_KEY = 'vastra_auth';
+  const getAuth = ()=>{ try{return JSON.parse(localStorage.getItem(AUTH_KEY));}catch(e){return null} };
+  const setAuth = (obj)=>localStorage.setItem(AUTH_KEY, JSON.stringify(obj));
+  const clearAuth = ()=>localStorage.removeItem(AUTH_KEY);
+
+  const loginBtn = document.getElementById('loginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const userChip = document.getElementById('userChip');
+  const userName = document.getElementById('userName');
+  const applyBtn = document.getElementById('applyBtn');
+  const applyBtnMobile = document.getElementById('applyBtnMobile');
+  const loginLinkMobile = document.getElementById('loginLinkMobile');
+
+  const modal = document.getElementById('loginModal');
+  const closeLogin = document.getElementById('closeLogin');
+  const loginForm = document.getElementById('loginForm');
+  const loginName = document.getElementById('loginName');
+
+  function openLogin(){ modal.removeAttribute('hidden'); loginName && loginName.focus(); }
+  function closeLoginModal(){ modal.setAttribute('hidden',''); }
+
+  function updateAuthUI(){
+    const a = getAuth();
+    if(a){
+      userChip.style.display='inline-flex';
+      userName.textContent = a.name;
+      loginBtn.style.display='none';
+      logoutBtn.style.display='inline-flex';
+    }else{
+      userChip.style.display='none';
+      loginBtn.style.display='inline-flex';
+      logoutBtn.style.display='none';
+    }
+  }
+
+  loginBtn && loginBtn.addEventListener('click', openLogin);
+  loginLinkMobile && loginLinkMobile.addEventListener('click', openLogin);
+  closeLogin && closeLogin.addEventListener('click', closeLoginModal);
+
+  loginForm && loginForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = loginName.value.trim();
+    if(!name) return;
+    setAuth({ name, ts: Date.now() });
+    closeLoginModal();
+    updateAuthUI();
+  });
+
+  logoutBtn && logoutBtn.addEventListener('click', ()=>{ clearAuth(); updateAuthUI(); });
+
+  function goApply(){
+    const a = getAuth();
+    if(!a){ openLogin(); return; }
+    location.href = 'ansokan.html';
+  }
+  applyBtn && applyBtn.addEventListener('click', goApply);
+  applyBtnMobile && applyBtnMobile.addEventListener('click', goApply);
+
+  // Auto-öppna login om man skickats hit med ?login=required
+  if(new URLSearchParams(location.search).get('login') === 'required'){ openLogin(); }
+
+  // init
+  updateAuthUI();
+</script>
 </body>
 </html>

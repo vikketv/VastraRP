@@ -137,23 +137,45 @@
       a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});mobile.setAttribute('hidden','');}})
     });
   </script>
-  <!-- Login Modal -->
-<div id="loginModal" class="modal" hidden>
-  <div class="box">
-    <h3 style="margin:0 0 .6rem">Logga in</h3>
-    <p class="muted" style="margin-top:0">Fyll i ditt Discord-namn (eller valfritt namn) för att låsa upp ansökan.</p>
-    <form id="loginForm" class="row">
-      <div>
-        <label for="loginName">Namn</label>
-        <input id="loginName" placeholder="ex. Viktor#1234" required />
-      </div>
-      <div style="display:flex;gap:.6rem;justify-content:flex-end">
-        <button type="button" class="btn ghost" id="closeLogin">Avbryt</button>
-        <button type="submit" class="btn">Logga in</button>
-      </div>
-    </form>
-  </div>
-</div>
+<script>
+  async function getMe(){
+    try{ const r = await fetch('/api/me', { credentials: 'include' }); return r.ok ? r.json() : null; }
+    catch{ return null; }
+  }
+  function setAuthUI(me){
+    const userChip = document.getElementById('userChip');
+    const userName = document.getElementById('userName');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    if(me){
+      userChip.style.display = 'inline-flex';
+      userName.textContent = me.global_name || me.username;
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-flex';
+    }else{
+      userChip.style.display = 'none';
+      loginBtn.style.display = 'inline-flex';
+      logoutBtn.style.display = 'none';
+    }
+  }
+  // Knapp-handlers
+  document.getElementById('loginBtn')?.addEventListener('click', ()=> location.href='/api/login');
+  document.getElementById('logoutBtn')?.addEventListener('click', ()=> location.href='/api/logout');
+
+  async function goApply(){
+    const me = await getMe();
+    if(!me){ location.href = '/api/login'; return; }
+    location.href = 'ansokan.html';
+  }
+  document.getElementById('applyBtn')?.addEventListener('click', goApply);
+  document.getElementById('applyBtnMobile')?.addEventListener('click', goApply);
+
+  // Init UI
+  (async ()=> setAuthUI(await getMe()))();
+  // Om man kom från redirect med ?login=required -> starta login direkt
+  if(new URLSearchParams(location.search).get('login')==='required'){
+    location.replace('/api/login');
+  }
 </script>
 </body>
 </html>

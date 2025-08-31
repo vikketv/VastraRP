@@ -62,13 +62,16 @@
 </head>
 <body>
   <script>
-  const AUTH_KEY = 'vastra_auth';
-  let __auth = null;
-  try { __auth = JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e){ __auth = null; }
-  if(!__auth){
-    // Skicka tillbaka till startsidan och be om inloggning
-    location.href = 'index.html?login=required';
+window.__AUTH = null;
+window.__authReady = (async () => {
+  try {
+    const r = await fetch('/api/me', { credentials: 'include' });
+    if (!r.ok) { location.replace('index.html?login=required'); return; }
+    window.__AUTH = await r.json();
+  } catch (e) {
+    location.replace('index.html?login=required');
   }
+})();
 </script>
   <header>
     <div class="container nav">
@@ -183,13 +186,17 @@
   <script>
     // ----- SETTINGS -----
     const WEBHOOKS = { whitelist: "https://discord.com/api/webhooks/XXXX/WHITELIST" };
-    const RELAY_URL = ""; // Om du använder en enkel relay/proxy, sätt URL här.
+    const RELAY_URL = "/api/relay"; // Om du använder en enkel relay/proxy, sätt URL här.
 
     // helpers
     const $ = (q,ctx=document)=>ctx.querySelector(q);
     const $$ = (q,ctx=document)=>[...ctx.querySelectorAll(q)];
     const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
-    // Prefill name from auth
+    // Prefill name from auth (after OAuth ready)
+window.__authReady?.then(()=>{
+  const f = document.getElementById('fullName');
+  if(f && window.__AUTH){ f.value = window.__AUTH.global_name || window.__AUTH.username || ''; }
+});
     try{ if(window.__AUTH && document.getElementById('fullName')){ document.getElementById('fullName').value = window.__AUTH.name || ''; } }catch(_){}
 
     // Editor toolbar (execCommand används för enkelhet – funkar i moderna browsers även om det är deprecated)
@@ -249,6 +256,7 @@
       }
 
       const fields = [
+        { name:'Discord', value: ((window.__AUTH?.global_name || window.__AUTH?.username || 'okänd') + ' (' + (window.__AUTH?.id || '-') + ')'), inline:true },
         { name:'Fullständigt namn', value: fullName, inline:true },
         { name:'Födelsedatum', value: birth, inline:true },
         { name:'Karaktärsnamn', value: charName, inline:true },

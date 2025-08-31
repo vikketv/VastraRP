@@ -5,32 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Västra RP – Loggar in…</title>
   <style>
-    body{margin:0;height:100dvh;display:grid;place-items:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
-      background:#0c1222;color:#e7eaf6}
+    body{margin:0;height:100dvh;display:grid;place-items:center;background:#0c1222;color:#e7eaf6;
+         font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans}
     .box{padding:1.2rem 1.4rem;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#121a3b}
+    .muted{opacity:.75}
+    .row{display:flex;gap:.6rem;justify-content:center;margin-top:.8rem}
+    a.btn{padding:.5rem .8rem;border-radius:10px;border:1px solid rgba(255,255,255,.15);color:#e7eaf6;text-decoration:none}
   </style>
 </head>
 <body>
-  <div class="box">Loggar in via Discord…</div>
+  <div class="box">
+    <div id="status">Loggar in via Discord…</div>
+    <div class="muted" id="desc"></div>
+    <div class="row" id="actions" style="display:none">
+      <a class="btn" id="back">Till startsidan</a>
+      <a class="btn" id="login">Logga in igen</a>
+    </div>
+  </div>
   <script>
-    // Repo-bas för GitHub Pages (/VastraRP)
-    const base = '/' + (location.pathname.split('/')[1] || '');
-    const params = new URLSearchParams(location.search);
-    const code = params.get('code');
-    const state = params.get('state');
+    const BASE = '/' + (location.pathname.split('/')[1] || ''); // /VastraRP
+    const AUTH_URL =
+      "https://discord.com/oauth2/authorize?client_id=1411631069978951701&response_type=token&redirect_uri=https%3A%2F%2Fvikketv.github.io%2FVastraRP%2Fauth%2Fdiscord&scope=identify";
+    const $ = id => document.getElementById(id);
+    const showErr = (title, msg) => { $('status').textContent = title; $('desc').textContent = msg || ''; $('actions').style.display='flex'; };
+    $('back').href = BASE + "/index.html";
+    $('login').href = AUTH_URL;
 
-    if (code) {
-      // Markera användaren som inloggad (enkel “session” för att låsa upp ansökan)
-      localStorage.setItem('vastra_auth', JSON.stringify({
-        name: 'Discord-inloggad',
-        code, state, ts: Date.now()
-      }));
-      location.replace(base + '/ansokan.html');
-    } else {
-      // Ingen code => tillbaka till start och trigga login
-      location.replace(base + '/index.html?login=required');
-    }
+    const hash = new URLSearchParams(location.hash.slice(1));
+    const token = hash.get('access_token');
+    const err   = hash.get('error');
+
+    (async () => {
+      try {
+        if (err) return showErr('Inloggning avbröts', 'Försök igen.');
+        if (!token) return showErr('Ingen token mottagen', 'Kontrollera Discord-appens OAuth2-inställningar.');
+
+        $('desc').textContent = 'Hämtar användare…';
+        const r = await fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${token}` } });
+        if(!r.ok) throw new Error('user fetch ' + r.status);
+        const u = await r.json();
+        const avatar_url = u.avatar
+          ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=64`
+          : `https://cdn.discordapp.com/embed/avatars/${(+u.discriminator||0)%5}.png`;
+
+        localStorage.setItem('vastra_auth', JSON.stringify({
+          id: u.id,
+          username: u.username,
+          global_name: u.global_name || u.username,
+          discriminator: u.discriminator,
+          avatar_url,
+          ts: Date.now()
+        }));
+        location.replace(BASE + '/ansokan.html');
+      } catch (e) {
+        console.error(e);
+        showErr('Tekniskt fel vid inloggning', 'Prova igen. Om det kvarstår, dubbelkolla OAuth2-inställningarna.');
+      }
+    })();
   </script>
 </body>
 </html>
+

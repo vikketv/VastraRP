@@ -276,61 +276,55 @@
       </aside>
     </div>
   </footer>
+<script>
+  // --- Konfig ---
+  const AUTH_URL =
+    "https://discord.com/oauth2/authorize?client_id=1411631069978951701&response_type=token&redirect_uri=https%3A%2F%2Fvikketv.github.io%2FVastraRP%2Fauth%2Fdiscord&scope=identify";
+  const AUTH_KEY = "vastra_auth";
 
-  <script>
-    // --- Konfig ---
-    const AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1411631069978951701&response_type=token&redirect_uri=https%3A%2F%2Fvikketv.github.io%2FVastraRP%2Fauth%2Fdiscord&scope=identify";
-    const AUTH_KEY = "vastra_auth"; // localStorage-nyckel (sätts på /auth/discord)
+  // Allmänt
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Allmänt
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const $ = (q, ctx = document) => ctx.querySelector(q);
+  // Session helpers
+  const getSession = () => { try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; } };
 
-    // Läs session
-    function getSession() { try { return JSON.parse(localStorage.getItem('vastra_auth')); } catch { return null; } }
-
-    function setUI(s) {
-      const chip = document.getElementById('userChip');
-      const nameEl = document.getElementById('userName');
-      const avEl = document.getElementById('userAvatar');
-      const loginBtn = document.getElementById('loginBtn');
-      const logoutBtn = document.getElementById('logoutBtn');
-      if (s) {
-        chip.style.display = 'inline-flex';
-        nameEl.textContent = s.global_name || s.username || 'Discord';
-        if (avEl) { avEl.src = s.avatar_url || ''; avEl.style.display = s.avatar_url ? 'block' : 'none'; }
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-flex';
-      } else {
-        chip.style.display = 'none';
-        loginBtn.style.display = 'inline-flex';
-        logoutBtn.style.display = 'none';
-      }
+  function setUI(s){
+    const chip = document.getElementById('userChip');
+    const nameEl = document.getElementById('userName');
+    const avEl   = document.getElementById('userAvatar');
+    const login  = document.getElementById('loginBtn');
+    const logout = document.getElementById('logoutBtn');
+    if(s){
+      chip.style.display = 'inline-flex';
+      nameEl.textContent = s.global_name || s.username || 'Discord';
+      if(avEl){ avEl.src = s.avatar_url || ''; avEl.style.display = s.avatar_url ? 'block' : 'none'; }
+      login.style.display = 'none';
+      logout.style.display = 'inline-flex';
+    }else{
+      chip.style.display = 'none';
+      login.style.display = 'inline-flex';
+      logout.style.display = 'none';
     }
+  }
 
-    // Login/Logout
-    document.getElementById('loginBtn')?.addEventListener('click', () => location.href = AUTH_URL);
-    document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.removeItem('vastra_auth'); setUI(null); });
+  // Login/Logout
+  document.getElementById('loginBtn')?.addEventListener('click', () => location.href = AUTH_URL);
+  document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.removeItem(AUTH_KEY); setUI(null); });
 
-    // Gating för ansökan
-    function goApply(e) {
-      const s = getSession();
-      if (!s) {
-        e.preventDefault();
-        location.href = AUTH_URL; // kräver inloggning först
-      }
-    }
-    $('#applyBtn')?.addEventListener('click', goApply);
-    $('#applyBtnHero')?.addEventListener('click', goApply);
+  // Gate “Ansök nu”
+  function requireLogin(e){
+    if(!getSession()){ e.preventDefault(); location.href = AUTH_URL; }
+  }
+  document.getElementById('applyBtn')?.addEventListener('click', requireLogin);
+  document.getElementById('applyBtnHero')?.addEventListener('click', requireLogin);
 
-    // Auto-loginflow om man kom med ?login=required
-    if (new URLSearchParams(location.search).get('login') === 'required') {
-      location.replace(AUTH_URL);
-    }
+  // Auto-start login om vi kom med ?login=required
+  if(new URLSearchParams(location.search).get('login') === 'required'){
+    location.replace(AUTH_URL);
+  }
 
-    // Init UI
-    setUI(getSession());
-  </script>
+  // Init UI
+  setUI(getSession());
+</script>
 </body>
-
 </html>

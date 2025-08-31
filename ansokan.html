@@ -61,18 +61,7 @@
   </style>
 </head>
 <body>
-  <script>
-window.__AUTH = null;
-window.__authReady = (async () => {
-  try {
-    const r = await fetch('/api/me', { credentials: 'include' });
-    if (!r.ok) { location.replace('index.html?login=required'); return; }
-    window.__AUTH = await r.json();
-  } catch (e) {
-    location.replace('index.html?login=required');
-  }
-})();
-</script>
+  <script>(function(){const AUTH_KEY='vastra_auth';let a=null;try{a=JSON.parse(localStorage.getItem(AUTH_KEY));}catch(e){}if(!a){location.replace('index.html?login=required');}else{window.__AUTH=a;}})();</script>
   <header>
     <div class="container nav">
       <a class="brand" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1f2a4d" opacity=".5"/><rect x="11" y="22" width="42" height="20" rx="4" fill="#2b3a67"/><rect x="11" y="30" width="42" height="4" fill="#ffd200"/><rect x="26" y="22" width="4" height="20" fill="#ffd200"/></svg><span>Västra RP</span></a>
@@ -186,17 +175,13 @@ window.__authReady = (async () => {
   <script>
     // ----- SETTINGS -----
     const WEBHOOKS = { whitelist: "https://discord.com/api/webhooks/XXXX/WHITELIST" };
-    const RELAY_URL = "/api/relay"; // Om du använder en enkel relay/proxy, sätt URL här.
+    const RELAY_URL = ""; // Om du använder en enkel relay/proxy, sätt URL här.
 
     // helpers
     const $ = (q,ctx=document)=>ctx.querySelector(q);
     const $$ = (q,ctx=document)=>[...ctx.querySelectorAll(q)];
     const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
-    // Prefill name from auth (after OAuth ready)
-window.__authReady?.then(()=>{
-  const f = document.getElementById('fullName');
-  if(f && window.__AUTH){ f.value = window.__AUTH.global_name || window.__AUTH.username || ''; }
-});
+    // Prefill name from auth
     try{ if(window.__AUTH && document.getElementById('fullName')){ document.getElementById('fullName').value = window.__AUTH.name || ''; } }catch(_){}
 
     // Editor toolbar (execCommand används för enkelhet – funkar i moderna browsers även om det är deprecated)
@@ -256,7 +241,6 @@ window.__authReady?.then(()=>{
       }
 
       const fields = [
-        { name:'Discord', value: ((window.__AUTH?.global_name || window.__AUTH?.username || 'okänd') + ' (' + (window.__AUTH?.id || '-') + ')'), inline:true },
         { name:'Fullständigt namn', value: fullName, inline:true },
         { name:'Födelsedatum', value: birth, inline:true },
         { name:'Karaktärsnamn', value: charName, inline:true },

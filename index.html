@@ -76,14 +76,13 @@
       </a>
       <nav class="navlinks">
       </nav>
-<div style="display:flex;gap:.6rem;align-items:center">
-  <span id="userChip" class="chip" style="display:none">Inloggad som <b id="userName"></b></span>
-  <button class="btn ghost" id="loginBtn">Logga in</button>
-  <button class="btn ghost" id="logoutBtn" style="display:none">Logga ut</button>
-  <button class="btn alt" id="applyBtn">Ansök nu</button>
-  <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Gå till Discord</a>
-  <button class="btn ghost menu" id="menuBtn">☰</button>
-</div>
+      <div style="display:flex;gap:.6rem;align-items:center">
+        <a class="btn ghost" href="https://discord.gg/3wRYxTPCU8" target="_blank" rel="noopener">Gå till Discord</a>
+        <a class="btn alt" href="ansokan.html">Ansök nu</a>
+        <button class="btn ghost menu" id="menuBtn">☰</button>
+      </div>
+    </div>
+  </header>
 
   <main id="top" class="hero">
     <div class="container hero-grid">
@@ -137,45 +136,5 @@
       a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});mobile.setAttribute('hidden','');}})
     });
   </script>
-<script>
-  async function getMe(){
-    try{ const r = await fetch('/api/me', { credentials: 'include' }); return r.ok ? r.json() : null; }
-    catch{ return null; }
-  }
-  function setAuthUI(me){
-    const userChip = document.getElementById('userChip');
-    const userName = document.getElementById('userName');
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    if(me){
-      userChip.style.display = 'inline-flex';
-      userName.textContent = me.global_name || me.username;
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-flex';
-    }else{
-      userChip.style.display = 'none';
-      loginBtn.style.display = 'inline-flex';
-      logoutBtn.style.display = 'none';
-    }
-  }
-  // Knapp-handlers
-  document.getElementById('loginBtn')?.addEventListener('click', ()=> location.href='/api/login');
-  document.getElementById('logoutBtn')?.addEventListener('click', ()=> location.href='/api/logout');
-
-  async function goApply(){
-    const me = await getMe();
-    if(!me){ location.href = '/api/login'; return; }
-    location.href = 'ansokan.html';
-  }
-  document.getElementById('applyBtn')?.addEventListener('click', goApply);
-  document.getElementById('applyBtnMobile')?.addEventListener('click', goApply);
-
-  // Init UI
-  (async ()=> setAuthUI(await getMe()))();
-  // Om man kom från redirect med ?login=required -> starta login direkt
-  if(new URLSearchParams(location.search).get('login')==='required'){
-    location.replace('/api/login');
-  }
-</script>
 </body>
 </html>

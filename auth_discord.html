@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Västra RP – Loggar in…</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#0c1222; --card:#121a3b; --text:#e7eaf6; --muted:#b8c0e0; --border:rgba(255,255,255,.08); --radius:16px; }
+    *{box-sizing:border-box}
+    body{margin:0;display:grid;place-items:center;height:100svh;background:radial-gradient(1200px 800px at -10% -10%, rgba(14,165,233,.16), transparent),radial-gradient(1200px 800px at 110% -10%, rgba(22,163,74,.12), transparent),var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .card{width:min(560px,100% - 2rem);background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+    .muted{color:var(--muted)}
+    code{background:rgba(255,255,255,.06);border:1px solid var(--border);padding:.15rem .35rem;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 style="margin:.2rem 0 0">Loggar in…</h1>
+    <p class="muted" id="msg">Vänta ett ögonblick medan vi verifierar din Discord‑inloggning.</p>
+    <pre id="err" style="display:none;white-space:pre-wrap"></pre>
+  </div>
+
+  <script>
+    // === Konfiguration ===
+    // Din serverless‑endpoint som växlar 'code' -> token + hämtar /users/@me och returnerar profil.
+    // Exempel på Worker/Function skickas av mig i chatten. Sätt din URL här:
+    const EXCHANGE_URL = ""; // t.ex. https://auth.vastrarp.workers.dev/discord/callback
+
+    const AUTH_KEY = 'vastra_auth';
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    const err = params.get('error');
+
+    const msgEl = document.getElementById('msg');
+    const errEl = document.getElementById('err');
+
+    async function run(){
+      if(err){ msgEl.textContent = 'Inloggningen avbröts: '+err; return; }
+      if(!code){ msgEl.textContent = 'Ingen kod mottagen. Återgår till startsidan…'; setTimeout(()=>location.replace('../index.html'), 1500); return; }
+      if(!EXCHANGE_URL){
+        msgEl.innerHTML = 'Saknar backend för att byta <code>code</code> mot token. Lägg in din EXCHANGE_URL i <code>auth/discord.html</code> och ladda om.';
+        return;
+      }
+      try{
+        const r = await fetch(EXCHANGE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ code, redirect_uri: location.origin + location.pathname })});
+        if(!r.ok) throw new Error('Exchange fel: '+r.status);
+        const data = await r.json();
+        if(!data || !data.user){ throw new Error('Ogiltigt svar från auth.'); }
+        const user = data.user; // {id, username, global_name, avatar}
+        const name = user.global_name || user.username || ('Användare '+user.id);
+        localStorage.setItem(AUTH_KEY, JSON.stringify({ id:user.id, name, avatar:user.avatar, ts: Date.now(), token: data.session || null }));
+        msgEl.textContent = 'Klart! Skickar dig vidare…';
+        const back = sessionStorage.getItem('after_login') || '../ansokan.html';
+        location.replace(back);
+      }catch(e){ msgEl.textContent = 'Något gick fel vid inloggning.'; errEl.style.display='block'; errEl.textContent = String(e); }
+    }
+    run();
+  </script>
+</body>
+</html>

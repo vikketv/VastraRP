@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Västra RP – Loggar in…</title>
+  <style>
+    body{margin:0;height:100dvh;display:grid;place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+      background:#0c1222;color:#e7eaf6}
+    .box{padding:1.2rem 1.4rem;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#121a3b}
+  </style>
+</head>
+<body>
+  <div class="box">Loggar in via Discord…</div>
+  <script>
+    // Repo-bas för GitHub Pages (/VastraRP)
+    const base = '/' + (location.pathname.split('/')[1] || '');
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+
+    if (code) {
+      // Markera användaren som inloggad (enkel “session” för att låsa upp ansökan)
+      localStorage.setItem('vastra_auth', JSON.stringify({
+        name: 'Discord-inloggad',
+        code, state, ts: Date.now()
+      }));
+      location.replace(base + '/ansokan.html');
+    } else {
+      // Ingen code => tillbaka till start och trigga login
+      location.replace(base + '/index.html?login=required');
+    }
+  </script>
+</body>
+</html>

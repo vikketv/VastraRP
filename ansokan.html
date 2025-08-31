@@ -61,6 +61,15 @@
   </style>
 </head>
 <body>
+  <script>
+  const AUTH_KEY = 'vastra_auth';
+  let __auth = null;
+  try { __auth = JSON.parse(localStorage.getItem(AUTH_KEY)); } catch(e){ __auth = null; }
+  if(!__auth){
+    // Skicka tillbaka till startsidan och be om inloggning
+    location.href = 'index.html?login=required';
+  }
+</script>
   <header>
     <div class="container nav">
       <a class="brand" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1f2a4d" opacity=".5"/><rect x="11" y="22" width="42" height="20" rx="4" fill="#2b3a67"/><rect x="11" y="30" width="42" height="4" fill="#ffd200"/><rect x="26" y="22" width="4" height="20" fill="#ffd200"/></svg><span>Västra RP</span></a>
@@ -180,6 +189,8 @@
     const $ = (q,ctx=document)=>ctx.querySelector(q);
     const $$ = (q,ctx=document)=>[...ctx.querySelectorAll(q)];
     const yearEl = document.getElementById('year'); if(yearEl) yearEl.textContent = new Date().getFullYear();
+    // Prefill name from auth
+    try{ if(window.__AUTH && document.getElementById('fullName')){ document.getElementById('fullName').value = window.__AUTH.name || ''; } }catch(_){}
 
     // Editor toolbar (execCommand används för enkelhet – funkar i moderna browsers även om det är deprecated)
     const editor = document.getElementById('editor');
@@ -255,6 +266,5 @@
       finally{ $$('input,textarea,button', form).forEach(x=>x.disabled=false); }
     });
   </script>
-    <script src="auth.js"></script>
 </body>
 </html>
